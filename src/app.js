@@ -68,8 +68,11 @@ App = {
         // Update app loading state 
         App.setLoading(true)
        
-        // Render account
+        // Render Account
         $('#account').html(App.account)
+
+        // Render Tasks
+        await App.renderTasks()
         
         // Update app loading state 
         App.setLoading(false)
@@ -81,17 +84,32 @@ App = {
         const $taskTemplate = $('.taskTemplate')
         
         // Render out each task with a new task template
-        for (var i = 0; i <= taskCount; i++) {
+        for (var i = 1; i <= taskCount; i++) {
             const task = await App.todoList.tasks(i)
             const taskId = task[0].toNumber()
             const taskContent = task[1]
             const taskCompleted = task[2] 
+        
+
+            // Create the html for the task
+            const $newTaskTemplate = $taskTemplate.clone()
+            $newTaskTemplate.find('.content').html(taskContent)
+            $newTaskTemplate.find('input')
+                            .prop('name', taskId)
+                            .prop('checked', taskCompleted)
+                            //.on('click', App.toggleCompleted)
+            
+            // Put the task in the correct list
+            if (taskCompleted) {
+                $('#completedTaskList').append($newTaskTemplate)
+            } else {
+                $('#taskList').append($newTaskTemplate)
+            }
+
+            // Show the task
+            $newTaskTemplate.show()
         }
-
-        // Create the html for the task
-
-
-        // Show the task
+        
     
     },
 
