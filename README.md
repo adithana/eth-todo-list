@@ -1,6 +1,6 @@
 ## About The Project
 
-<img src="images/screenshot1.png" width=100% >
+<img src="https://github.com/adithana/eth-todo-list/blob/main/images/Screenshot1.png" width=100% >
 
 This is my first project to learn ethereum blockchain app.
 It is a simple todo list app deployed on a local Ethereum blockchain [Ganache](https://trufflesuite.com/ganache/)
@@ -8,7 +8,7 @@ It is a simple todo list app deployed on a local Ethereum blockchain [Ganache](h
 The app is connected to [Metamask](https://metamask.io/) wallet as the gateway to 
 interact with Ethereum blockchain. 
 
-<img src="images/screenshot2.png" width=30% >
+<img src="https://github.com/adithana/eth-todo-list/blob/main/images/Screenshot2.png" width=30% >
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
