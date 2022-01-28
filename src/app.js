@@ -84,13 +84,17 @@ App = {
         // Remove new task input first
         const $newTaskInput = $('#newTaskInput')
         $newTaskInput.remove();
+
+    
         // Render out each task with a new task template
         for (var i = 1; i <= taskCount; i++) {
             const task = await App.todoList.tasks(i)
             const taskId = task[0].toNumber()
             const taskContent = task[1]
             const taskCompleted = task[2] 
-        
+            
+            // Prevent to render deleted task
+            if(taskId == 0) continue
 
             // Create the html for the task
             const $newTaskTemplate = $taskTemplate.clone()
@@ -99,6 +103,9 @@ App = {
                             .prop('name', taskId)
                             .prop('checked', taskCompleted)
                             .on('click', App.toggleCompleted)
+            $newTaskTemplate.find('button')
+                            .prop('name', taskId)
+                            .on('click', App.deleteTask)
             
             // Put the task in the list
             $('#taskList').append($newTaskTemplate)
@@ -115,6 +122,13 @@ App = {
         App.setLoading(true)
         const content = $('#newTask').val()
         await App.todoList.createTask(content, {from: App.account})
+        window.location.reload()
+    },
+
+    deleteTask: async (e) => {
+        App.setLoading(true)
+        const taskId = e.target.name
+        await App.todoList.deleteTask(taskId, {from: App.account})
         window.location.reload()
     },
 

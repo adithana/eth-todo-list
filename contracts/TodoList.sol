@@ -23,6 +23,10 @@ contract TodoList {
         bool completed
     );
 
+    event TaskDeleted(
+        uint id
+    );
+
     constructor() public {
         createTask("Learn Blockchain");
     }
@@ -34,10 +38,13 @@ contract TodoList {
     }
 
     function toggleCompleted(uint _id) public {
-        Task memory _task = tasks[_id];
-        _task.completed = !_task.completed;
-        tasks[_id] = _task;
-        emit TaskCompleted(_id, _task.completed);
+        tasks[_id].completed = !tasks[_id].completed;
+        emit TaskCompleted(_id, tasks[_id].completed);
+    }
+
+    function deleteTask(uint _id) public {
+        delete tasks[_id];
+        emit TaskDeleted(_id);
     }
 }
 

@@ -57,17 +57,50 @@ It is a simple todo list app deployed on a local Ethereum blockchain [Ganache](h
    ```sh
    git clone https://github.com/adithana/eth-todo-list
    ```
+
 4. Install NPM packages
    ```sh
    npm install
    ```
-5. Run the app
+
+5. Migrate the smart contracts to the Ethereum blockchain
+   ```sh
+   truffle migrate --reset
+   ```
+   
+6. Run the app
    ```sh
    npm run dev
    ```
 6. Connect your metamask account to the web
 
+To open Truffle console for debugging
+1. ```sh
+   truffle console
+   ```
+2. ```sh
+   todoList = await TodoList.deployed()
+   ```
+* To see the smart contract content
+    ```sh
+   todoList
+   ```
+* To see the smart contract address
+    ```sh
+   todoList.address
+   ```
+* To print a variable content
+    1.  ```sh
+        task = await todoList.tasks(1)
+        ```
+    2.  ```sh
+        task
+        ```
+
+
 <p align="right">(<a href="#top">back to top</a>)</p>
+
+
 
 
 
