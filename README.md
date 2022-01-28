@@ -1,10 +1,14 @@
 ## About The Project
 
-<!-- [![Product Name Screen Shot][product-screenshot]] updated soon--> 
+<img src="images/screenshot1.png" width=100% >
 
 This is my first project to learn ethereum blockchain app.
 It is a simple todo list app deployed on a local Ethereum blockchain [Ganache](https://trufflesuite.com/ganache/)
 
+The app is connected to [Metamask](https://metamask.io/) wallet as the gateway to 
+interact with Ethereum blockchain. 
+
+<img src="images/screenshot2.png" width=30% >
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -67,7 +71,7 @@ It is a simple todo list app deployed on a local Ethereum blockchain [Ganache](h
    ```sh
    truffle migrate --reset
    ```
-   
+
 6. Run the app
    ```sh
    npm run dev
@@ -146,4 +150,5 @@ Helpful resources
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
-[product-screenshot]: images/screenshot.png
+[screenshot1]: images/screenshot1.png
+[screenshot2]: images/screenshot2.png
