@@ -5,30 +5,24 @@ App = {
         // Load app...
         console.log("app loading...")
         await App.loadWeb3()
-        await App.loadAccount()
         await App.loadContract()
         await App.render()
-        web3.eth.defaultAccount = web3.eth.accounts[0]
     },
 
-    // https://medium.com/metamask/https-medium-com-metamask-breaking-change-injecting-web3-7722797916a8
     loadWeb3: async () => {
-        if (typeof web3 !== 'undefined') {
-            App.web3Provider = web3.currentProvider
-            web3 = new Web3(web3.currentProvider)
-        } else {
-            window.alert("Please connect to Metamask.")
-        }
-        // Modern dapp browsers...
+        // Metamask
         if (window.ethereum) {
-            window.web3 = new Web3(ethereum)
+            App.web3Provider = window.ethereum
             try {
                 // Request account access if needed
-                await ethereum.enable()
-                // Acccounts now exposed
-                web3.eth.sendTransaction({/* ... */ })
+                await App.loadAccount()
+                window.web3 = new Web3(window.ethereum)
             } catch (error) {
-                // User denied account access...
+                if (error.code === 4001) {
+                    // User rejected request
+                    window.alert("User denied account access.")
+                  }
+                  window.alert("Error occured.")
             }
         }
         // Legacy dapp browsers...
@@ -36,7 +30,7 @@ App = {
             App.web3Provider = web3.currentProvider
             window.web3 = new Web3(web3.currentProvider)
             // Acccounts always exposed
-            web3.eth.sendTransaction({/* ... */ })
+            web3.eth.sendTransaction({ })
         }
         // Non-dapp browsers...
         else {
@@ -46,7 +40,11 @@ App = {
 
     loadAccount: async () => {
         // Set the current blockchain account
-        App.account = web3.eth.accounts[0];
+
+        //App.account = web3.eth.accounts[0]; //Deprecated
+        App.accounts = await ethereum.request({ method: 'eth_accounts' });
+        App.account = App.accounts[0]
+        console.log(App.account)
     },
 
     loadContract: async () => {
@@ -82,7 +80,10 @@ App = {
         // Load the total task count from the blockchain
         const taskCount = await App.todoList.taskCount()
         const $taskTemplate = $('.taskTemplate')
-        
+
+        // Remove new task input first
+        const $newTaskInput = $('#newTaskInput')
+        $newTaskInput.remove();
         // Render out each task with a new task template
         for (var i = 1; i <= taskCount; i++) {
             const task = await App.todoList.tasks(i)
@@ -99,44 +100,41 @@ App = {
                             .prop('checked', taskCompleted)
                             .on('click', App.toggleCompleted)
             
-            // Put the task in the correct list
-            if (taskCompleted) {
-                $('#completedTaskList').append($newTaskTemplate)
-            } else {
-                $('#taskList').append($newTaskTemplate)
-            }
+            // Put the task in the list
+            $('#taskList').append($newTaskTemplate)
 
             // Show the task
-            $newTaskTemplate.show()
+            $newTaskTemplate.removeClass('d-none')
         }
         
-    
+        // Put new task input on the last of the list
+        $('#taskList').append($newTaskInput)
     },
 
     createTask: async () => {
         App.setLoading(true)
         const content = $('#newTask').val()
-        await App.todoList.createTask(content)
+        await App.todoList.createTask(content, {from: App.account})
         window.location.reload()
     },
 
     toggleCompleted: async (e) => {
         App.setLoading(true)
         const taskId = e.target.name
-        await App.todoList.toggleCompleted(taskId)
+        await App.todoList.toggleCompleted(taskId, {from: App.account})
         window.location.reload()
     },
 
     setLoading: (boolean) => {
         App.loading = boolean
         const loader = $('#loader')
-        const content = $('#content')
+        const taskList = $('#taskList')
         if (boolean) {
           loader.show()
-          content.hide()
+          taskList.addClass('d-none')
         } else {
           loader.hide()
-          content.show()
+          taskList.removeClass('d-none')
         }
       }
 }
